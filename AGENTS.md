@@ -21,13 +21,20 @@ Entry point: `index.js` · Server runs on port `3001`.
 
 ### How to Add New Ecosystems
 
-Add a new entry to `.github/dependabot.yml` following this pattern:
+Add a new entry to `.github/dependabot.yml` following this pattern. Include a `groups` block so updates land in one PR per ecosystem (matches the existing convention — see `docs/DEPENDABOT.md`):
 
 ```yaml
 - package-ecosystem: "ecosystem-name"
   directory: "/path/to/dependencies"
   schedule:
     interval: "weekly"
+  groups:
+    ecosystem-name-minor-patch:
+      patterns: ["*"]
+      update-types: ["minor", "patch"]
+    ecosystem-name-major:
+      patterns: ["*"]
+      update-types: ["major"]
 ```
 
 ### Supported Ecosystems
