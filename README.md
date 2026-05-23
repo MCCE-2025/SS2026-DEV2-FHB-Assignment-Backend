@@ -19,12 +19,14 @@ npm start
 npm run dev
 ```
 
-## Dependency Management
+## Security & Quality
 
-This repo uses **Dependabot** for scheduled dependency updates and **`npm audit`** on every PR to block vulnerable dependencies from being merged.
+This repo uses **CodeQL** for static analysis of application code, **Dependabot** for scheduled dependency updates, and **`npm audit`** on every PR to block vulnerable dependencies from being merged.
 
+- CodeQL workflow: [`.github/workflows/codeql.yml`](.github/workflows/codeql.yml)
+- CodeQL details: [`docs/CODEQL.md`](docs/CODEQL.md)
 - Dependabot config: [`.github/dependabot.yml`](.github/dependabot.yml)
 - PR audit workflow: [`.github/workflows/dependency-audit.yml`](.github/workflows/dependency-audit.yml)
-- Full details: [`docs/DEPENDABOT.md`](docs/DEPENDABOT.md)
+- Dependabot details: [`docs/DEPENDABOT.md`](docs/DEPENDABOT.md)
 
 > ⚠️ When adding new third-party components, update `.github/dependabot.yml`. See [`AGENT.md`](AGENT.md).
