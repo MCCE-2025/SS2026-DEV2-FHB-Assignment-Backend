@@ -13,7 +13,7 @@ Multi-stage [Dockerfile](../Dockerfile):
 
 Both stages run on the same **Node 24** Active LTS major and the same **Debian 12 (bookworm)** family, so the `node_modules` produced in `deps` has a matching ABI and libc when copied into the distroless runtime. The supported Node version is also declared in [`package.json`](../package.json) via `engines.node`, and the CI workflows resolve `lts/*` to the same major automatically.
 
-> Why not Node 26? Google's distroless project ships only LTS Node majors, and Node 26 (released April 2026) does not become Active LTS until October 2026. As soon as `gcr.io/distroless/nodejs26-debian12` is published, Dependabot's `docker-all` group will offer the bump.
+> Why not Node 26? Google's distroless project ships only LTS Node majors, and Node 26 (released April 2026) does not become Active LTS until October 2026. Dependabot is configured to ignore non-LTS and major Node image bumps (see [`DEPENDABOT.md`](./DEPENDABOT.md)); adopt the next LTS major manually once `gcr.io/distroless/nodejs<major>-debian12` is available and the line is Active LTS.
 
 Hardening choices:
 

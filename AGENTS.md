@@ -82,7 +82,7 @@ Every `FROM` line in the [`Dockerfile`](Dockerfile) MUST be pinned to a `@sha256
 FROM gcr.io/distroless/nodejs22-debian12:nonroot@sha256:13593b7570658e8477de39e2f4a1dd25db2f836d68a0ba771251572d23bb4f8e AS runtime
 ```
 
-Floating tags (`:nonroot`, `:22-alpine`, …) let the GHA build cache silently keep a vulnerable base layer that the Snyk container scan ([`docs/SNYK.md`](docs/SNYK.md)) has already flagged. Dependabot's `docker-all` group bumps both the digest and the version comment weekly. To resolve a current digest manually:
+Floating tags (`:nonroot`, `:22-alpine`, …) let the GHA build cache silently keep a vulnerable base layer that the Snyk container scan ([`docs/SNYK.md`](docs/SNYK.md)) has already flagged. Dependabot's `docker-all` group bumps digests (and trailing version comments) within the pinned **LTS** Node major only — major bumps are ignored so non-LTS lines (e.g. Node 26 before its LTS window) are not proposed automatically. To resolve a current digest manually:
 
 ```bash
 docker buildx imagetools inspect gcr.io/distroless/nodejs22-debian12:nonroot

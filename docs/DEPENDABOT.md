@@ -37,6 +37,14 @@ Major bumps are kept in a separate group because they may be breaking and warran
 > comment. See [`DOCKER.md`](./DOCKER.md) and [`SNYK.md`](./SNYK.md) for the
 > rebuild + container-scan flow.
 
+> **Docker Node images stay on the pinned LTS major.** The `docker` entry
+> ignores semver-major bumps for `node` and `distroless/nodejs*`, plus odd Node
+> majors that are never LTS. This matches CI (`node-version: lts/*`) and
+> distroless, which only ships LTS Node majors. Weekly PRs refresh digests
+> within the current major; moving to the next Active LTS (e.g. `24` → `26`)
+> is a deliberate `Dockerfile` + `engines.node` change after the new line is
+> LTS and `gcr.io/distroless/nodejs<major>-debian12` is published.
+
 ## Adding a New Ecosystem
 
 Append a new entry to `.github/dependabot.yml`:
