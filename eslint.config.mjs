@@ -88,4 +88,25 @@ export default defineConfig([
       'n/no-unpublished-import': 'off',
     },
   },
+
+  // Test files import dev-only packages (vitest, supertest).
+  {
+    files: ['tests/**/*.js', 'vitest.config.mjs'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        describe: 'readonly',
+        it: 'readonly',
+        expect: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+        beforeAll: 'readonly',
+        afterAll: 'readonly',
+      },
+    },
+    rules: {
+      'n/no-unpublished-require': 'off',
+      'n/no-unpublished-import': 'off',
+    },
+  },
 ])

@@ -45,6 +45,11 @@ via `npm audit` on pull requests
 
 - PR audit workflow: [`.github/workflows/dependency-audit.yml`](.github/workflows/dependency-audit.yml)
 
+### Tests
+
+- Tests & coverage: [`docs/TESTS.md`](docs/TESTS.md)
+- Runs in the Build workflow: [`.github/workflows/build.yml`](.github/workflows/build.yml)
+
 ### Build
 
 - Build workflow: [`.github/workflows/build.yml`](.github/workflows/build.yml)
