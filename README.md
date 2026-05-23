@@ -21,8 +21,10 @@ npm run dev
 
 ## Security & Quality
 
-This repo uses **CodeQL** for static analysis of application code, **Dependabot** for scheduled dependency updates, and **`npm audit`** on every PR to block vulnerable dependencies from being merged.
+This repo uses **ESLint** for JavaScript linting, **CodeQL** for static analysis of application code, **Dependabot** for scheduled dependency updates, and **`npm audit`** on every PR to block vulnerable dependencies from being merged.
 
+- ESLint workflow: [`.github/workflows/lint.yml`](.github/workflows/lint.yml)
+- ESLint details: [`docs/ESLINT.md`](docs/ESLINT.md)
 - CodeQL workflow: [`.github/workflows/codeql.yml`](.github/workflows/codeql.yml)
 - CodeQL details: [`docs/CODEQL.md`](docs/CODEQL.md)
 - Dependabot config: [`.github/dependabot.yml`](.github/dependabot.yml)
