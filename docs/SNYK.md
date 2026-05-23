@@ -15,7 +15,7 @@ Without `SNYK_TOKEN`, the scan job fails at the Snyk step.
 | Step | What happens |
 |------|----------------|
 | `build-and-push` | Builds and pushes the image to GHCR (unchanged) |
-| `snyk-scan` | Pulls `ghcr.io/<repo>:sha-<short-sha>`, runs `snyk container test` |
+| `snyk-scan` | Pulls `ghcr.io/<repo-lowercase>:sha-<short-sha>`, runs `snyk container test` |
 | SARIF upload | Findings appear under **Security → Code scanning** (`category: snyk-container`) |
 | Quality gate | Job fails when Snyk reports **high** or **critical** issues (`--severity-threshold=high`) |
 
