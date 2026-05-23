@@ -47,6 +47,22 @@ updates:
     commit-message:
       prefix: "chore(docker)"
       include: "scope"
+    # Stay on the pinned Active LTS Node major (see Dockerfile + CI lts/*). Dependabot
+    # bumps digests and patch/minor tags only; adopt the next LTS major manually.
+    ignore:
+      - dependency-name: "node"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "distroless/nodejs*"
+        update-types: ["version-update:semver-major"]
+      # Odd Node majors are never LTS (extra guard if semver-major matching fails).
+      - dependency-name: "node"
+        versions: ["23.x", "25.x", "27.x"]
+      - dependency-name: "distroless/nodejs23-*"
+        versions: ["*"]
+      - dependency-name: "distroless/nodejs25-*"
+        versions: ["*"]
+      - dependency-name: "distroless/nodejs27-*"
+        versions: ["*"]
     groups:
       docker-all:
         patterns: ["*"]
