@@ -17,6 +17,7 @@ Entry point: `index.js` · Server runs on port `3001`.
 
 ### Current Dependencies
 - **npm** (Node.js) at root (`/`)
+- **github-actions** at root (`/`)
 
 ### How to Add New Ecosystems
 
