@@ -5,8 +5,36 @@ const app = express()
 
 app.use(express.json())
 
+const escapeHtml = (text) =>
+  String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+
 app.get('/', (req, res) => {
-  res.send('<h1>Hello World!</h1>')
+  const items = notesService
+    .list()
+    .map(
+      (note) =>
+        `<li>${escapeHtml(note.content)}${note.important ? ' <strong>important</strong>' : ''}</li>`,
+    )
+    .join('\n')
+
+  res.type('html').send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Notes</title>
+</head>
+<body>
+  <h1>Notes</h1>
+  <ul>
+${items}
+  </ul>
+  <p>JSON API: <a href="/api/notes">/api/notes</a></p>
+</body>
+</html>`)
 })
 
 app.post('/api/notes', (request, response) => {
