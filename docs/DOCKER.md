@@ -8,7 +8,7 @@ Multi-stage [Dockerfile](../Dockerfile):
 
 | Stage | Base | Purpose |
 |-------|------|---------|
-| `deps` | `node:24.14.1-trixie-slim` | Install production npm dependencies only (`npm ci --omit=dev --ignore-scripts`) |
+| `deps` | `node:24-trixie-slim` | Install production npm dependencies only (`npm ci --omit=dev --ignore-scripts`) |
 | `runtime` | `gcr.io/distroless/nodejs24-debian13:nonroot` | Run the app as non-root without shell or package manager |
 
 Both stages run on the same **Node 24** Active LTS patch line and **Debian 13 (trixie)** family, so the `node_modules` produced in `deps` has a matching ABI and libc when copied into the distroless runtime. The supported Node version is also declared in [`package.json`](../package.json) via `engines.node`, and the CI workflows resolve `lts/*` to the same major automatically.
