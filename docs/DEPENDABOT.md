@@ -43,7 +43,7 @@ Major bumps are kept in a separate group because they may be breaking and warran
 > distroless, which only ships LTS Node majors. Weekly PRs refresh digests
 > within the current major; moving to the next Active LTS (e.g. `24` → `26`)
 > is a deliberate `Dockerfile` + `engines.node` change after the new line is
-> LTS and `gcr.io/distroless/nodejs<major>-debian12` is published.
+> LTS and `gcr.io/distroless/nodejs<major>-debian13` is published.
 
 ## Adding a New Ecosystem
 

@@ -79,13 +79,13 @@ Float refs like `@v6`, `@main`, or `@master` are rejected by the `unpinned-uses`
 Every `FROM` line in the [`Dockerfile`](Dockerfile) MUST be pinned to a `@sha256:…` digest with the human-readable tag as a trailing comment — same convention as `uses:` for GitHub Actions:
 
 ```dockerfile
-FROM gcr.io/distroless/nodejs22-debian12:nonroot@sha256:13593b7570658e8477de39e2f4a1dd25db2f836d68a0ba771251572d23bb4f8e AS runtime
+FROM gcr.io/distroless/nodejs24-debian13:nonroot@sha256:4c11c00f9d72bbe5d42fbcab421229b3c046d949f4e0a8e2d50e88a9b319a9e2 AS runtime
 ```
 
 Floating tags (`:nonroot`, `:22-alpine`, …) let the GHA build cache silently keep a vulnerable base layer that the Snyk container scan ([`docs/SNYK.md`](docs/SNYK.md)) has already flagged. Dependabot's `docker-all` group bumps digests (and trailing version comments) within the pinned **LTS** Node major only — major bumps are ignored so non-LTS lines (e.g. Node 26 before its LTS window) are not proposed automatically. To resolve a current digest manually:
 
 ```bash
-docker buildx imagetools inspect gcr.io/distroless/nodejs22-debian12:nonroot
+docker buildx imagetools inspect gcr.io/distroless/nodejs24-debian13:nonroot
 ```
 
 See [`docs/DOCKER.md`](docs/DOCKER.md) for the full image layout and [`docs/DEPENDABOT.md`](docs/DEPENDABOT.md) for the grouping and auto-merge rules.
