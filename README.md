@@ -56,4 +56,9 @@ via `npm audit` on pull requests
 - Docker details: [`docs/DOCKER.md`](docs/DOCKER.md)
 - Images are published to `ghcr.io/<owner>/<repo>` (see tag scheme in `docs/DOCKER.md`)
 
+### Snyk (container)
+
+- Runs in the Docker workflow after each image push (`snyk-scan` job)
+- Requires repository secret `SNYK_TOKEN` — see [`docs/SNYK.md`](docs/SNYK.md)
+
 > ⚠️ When adding new third-party components, update `.github/dependabot.yml`. See [`AGENTS.md`](AGENTS.md).
