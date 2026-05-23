@@ -8,18 +8,43 @@ Static application security testing (SAST) is provided via [`.github/workflows/c
 |---------|-------|
 | Language | `javascript-typescript` |
 | Query suite | `security-extended` |
+| Build mode | `none` (no autobuild step; JS/TS is extracted directly from source) |
 | Quality gate | Job fails on `error`-severity findings (CodeQL default) |
 | Workflow permissions | `contents: read`, `security-events: write`, `actions: read` |
+| Concurrency | One run per ref; superseded PR runs are cancelled |
 
 ## Triggers
 
 | Event | When |
 |-------|------|
-| `pull_request` | Every PR targeting `main` |
+| `pull_request` | PRs targeting `main` that change application source (see [PR path filters](#pr-path-filters) below) |
 | `push` | Every push to `main` |
 | `schedule` | Weekly, Monday 05:23 UTC (`23 5 * * 1`) |
 
 The scheduled run catches new vulnerabilities in the query pack even when no code changes.
+
+### PR path filters
+
+On pull requests, the workflow is **skipped** when the diff only touches paths that cannot affect JavaScript/TypeScript analysis:
+
+| Ignored path | Reason |
+|--------------|--------|
+| `**/*.md` | Documentation only |
+| `docs/**` | Documentation only |
+| `.github/**` | Workflows, Dependabot, and other GitHub config (not scanned as JS/TS) |
+
+Pushes to `main` and the weekly schedule still run CodeQL regardless of which files changed.
+
+**Note:** A PR that only edits `.github/workflows/codeql.yml` will not run CodeQL on the PR itself. The updated workflow is validated on the first push to `main` after merge.
+
+## Performance
+
+| Mechanism | What it does |
+|-----------|--------------|
+| **Built-in CodeQL cache** | `github/codeql-action@v4` restores and saves the CodeQL CLI bundle and query pack automatically between runs (see the *Restore CodeQL cache* step in workflow logs). No manual `actions/cache` step is needed. |
+| **`build-mode: none`** | Skips autobuild probing for this plain Node.js repo. |
+| **`concurrency`** | Cancels outdated PR runs when new commits are pushed; `main` and scheduled runs are not cancelled. |
+| **PR `paths-ignore`** | Avoids full scans for doc-only or CI-only PRs. |
 
 ## How It Fits With Other Security Tools
 
@@ -42,6 +67,16 @@ The workflow fails when CodeQL reports findings at **error** severity. To block 
 
 This step cannot be configured from repository files; it is a one-time repository setting.
 
+### Required checks and PR path filters
+
+If **`Analyze (javascript-typescript)`** is required and a PR only changes ignored paths (for example, `README.md` or `.github/workflows/build.yml`), the CodeQL job does not run. GitHub may then show the check as *Expected — waiting for status to be reported* and block the merge.
+
+Options:
+
+1. **Do not require CodeQL yet** — keep it informational until you need a hard gate.
+2. **Include a trivial source change** in the same PR when you only edit docs or workflows (not ideal).
+3. **Add a skipped sibling job** — a second job named `Analyze (javascript-typescript)` that runs only when paths are ignored and exits successfully, so required checks always report a status. This pattern is not configured in this repo today; add it before enabling branch protection if doc-only PRs should merge without touching application code.
+
 ## Viewing Results
 
 - **Security → Code scanning** — all findings and history
@@ -63,16 +98,16 @@ Suppress a specific rule on a line:
 eval(userInput); // codeql[js/eval-call]
 ```
 
-### Path ignores (optional)
+### CodeQL path ignores (optional)
 
-For broader exclusions, add [`.github/codeql/codeql-config.yml`](../.github/codeql/codeql-config.yml):
+PR [path filters](#pr-path-filters) control **when the workflow runs**. Separately, a [`.github/codeql/codeql-config.yml`](../.github/codeql/codeql-config.yml) file can exclude paths **from analysis** when a run does execute:
 
 ```yaml
 paths-ignore:
   - "**/node_modules/**"
 ```
 
-Not required for this repo today — the workflow has no custom config file yet.
+Not required for this repo today — the workflow has no custom CodeQL config file yet.
 
 ## Query Suite
 
