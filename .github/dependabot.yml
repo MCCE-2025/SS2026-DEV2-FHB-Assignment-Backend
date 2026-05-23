@@ -11,3 +11,8 @@ updates:
       prefix: "chore(deps)"
       prefix-development: "chore(deps-dev)"
       include: "scope"
+    groups:
+      production:
+        dependency-types: ["production"]
+      development:
+        dependency-types: ["development"]

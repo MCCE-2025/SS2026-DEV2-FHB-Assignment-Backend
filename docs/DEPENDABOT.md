@@ -12,6 +12,8 @@ Automated dependency updates are managed via [`.github/dependabot.yml`](../.gith
 | Open PR limit | 5 |
 | Commit prefix | `chore(deps)` / `chore(deps-dev)` |
 
+Updates are grouped into **production** and **development** dependencies to reduce PR noise.
+
 ## Adding a New Ecosystem
 
 Append a new entry to `.github/dependabot.yml`:
