@@ -44,6 +44,16 @@ This repo uses **ESLint** for JavaScript linting, **CodeQL** for static analysis
 via `npm audit` on pull requests
 
 - PR audit workflow: [`.github/workflows/dependency-audit.yml`](.github/workflows/dependency-audit.yml)
--
 
-> ⚠️ When adding new third-party components, update `.github/dependabot.yml`. See [`AGENT.md`](AGENT.md).
+### Build
+
+- Build workflow: [`.github/workflows/build.yml`](.github/workflows/build.yml)
+- Build details: [`docs/BUILD.md`](docs/BUILD.md)
+
+### Docker
+
+- Docker workflow: [`.github/workflows/docker.yml`](.github/workflows/docker.yml)
+- Docker details: [`docs/DOCKER.md`](docs/DOCKER.md)
+- Images are published to `ghcr.io/<owner>/<repo>` (see tag scheme in `docs/DOCKER.md`)
+
+> ⚠️ When adding new third-party components, update `.github/dependabot.yml`. See [`AGENTS.md`](AGENTS.md).
