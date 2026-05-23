@@ -25,7 +25,7 @@ The scheduled run catches new vulnerabilities in the query pack even when no cod
 
 ### PR path filters
 
-On pull requests, the workflow is **skipped** when the diff only touches paths that cannot affect JavaScript/TypeScript analysis:
+On pull requests, the full CodeQL scan is **skipped** when the diff only touches paths that cannot affect JavaScript/TypeScript analysis (a lightweight sibling job still reports check status):
 
 | Ignored path | Reason |
 |--------------|--------|
@@ -35,7 +35,7 @@ On pull requests, the workflow is **skipped** when the diff only touches paths t
 
 Pushes to `main` and the weekly schedule still run CodeQL regardless of which files changed.
 
-**Note:** A PR that only edits `.github/workflows/codeql.yml` will not run CodeQL on the PR itself. The updated workflow is validated on the first push to `main` after merge.
+**Note:** A PR that only edits `.github/workflows/codeql.yml` runs the lightweight `analyze-skipped` job on the PR. The full scan runs on the first push to `main` after merge.
 
 ## Performance
 
@@ -75,7 +75,7 @@ Options:
 
 1. **Do not require CodeQL yet** — keep it informational until you need a hard gate.
 2. **Include a trivial source change** in the same PR when you only edit docs or workflows (not ideal).
-3. **Add a skipped sibling job** — a second job named `Analyze (javascript-typescript)` that runs only when paths are ignored and exits successfully, so required checks always report a status. This pattern is not configured in this repo today; add it before enabling branch protection if doc-only PRs should merge without touching application code.
+3. **Skipped sibling job (configured)** — [`codeql.yml`](../.github/workflows/codeql.yml) includes an `analyze-skipped` job with the same name as the real scan. On PRs that only touch ignored paths, that job reports success so required checks are satisfied without running a full analysis.
 
 ## Viewing Results
 
