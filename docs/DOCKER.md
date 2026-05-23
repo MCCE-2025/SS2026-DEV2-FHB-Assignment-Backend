@@ -8,13 +8,18 @@ Multi-stage [Dockerfile](../Dockerfile):
 
 | Stage | Base | Purpose |
 |-------|------|---------|
-| `deps` | `node:22-alpine` | Install production npm dependencies only (`npm ci --omit=dev --ignore-scripts`) |
-| `runtime` | `gcr.io/distroless/nodejs22-debian12:nonroot` | Run the app as non-root without shell or package manager |
+| `deps` | `node:24-bookworm-slim` | Install production npm dependencies only (`npm ci --omit=dev --ignore-scripts`) |
+| `runtime` | `gcr.io/distroless/nodejs24-debian12:nonroot` | Run the app as non-root without shell or package manager |
+
+Both stages run on the same **Node 24** Active LTS major and the same **Debian 12 (bookworm)** family, so the `node_modules` produced in `deps` has a matching ABI and libc when copied into the distroless runtime. The supported Node version is also declared in [`package.json`](../package.json) via `engines.node`, and the CI workflows resolve `lts/*` to the same major automatically.
+
+> Why not Node 26? Google's distroless project ships only LTS Node majors, and Node 26 (released April 2026) does not become Active LTS until October 2026. As soon as `gcr.io/distroless/nodejs26-debian12` is published, Dependabot's `docker-all` group will offer the bump.
 
 Hardening choices:
 
 - **Distroless runtime** — no shell, `apt`, or extra OS utilities in the final image
 - **Non-root user** (`nonroot`, UID 65532)
+- **Digest-pinned base images** — both `FROM` lines reference `@sha256:…` with a trailing version comment, mirroring the GitHub-Actions SHA-pinning policy (see [`ACTIONS-SECURITY.md`](ACTIONS-SECURITY.md)). The floating `:nonroot` / `:26-alpine` tags would otherwise let a stale GHA build cache silently reintroduce a vulnerable layer that the Snyk scan already flagged
 - **Production deps only** — devDependencies (ESLint, nodemon, etc.) never enter the image
 - **`--ignore-scripts`** — lifecycle scripts from dependencies are not executed at image build time
 - **[`.dockerignore`](../.dockerignore)** — keeps build context small and excludes docs, `.git`, local `node_modules`
@@ -71,7 +76,9 @@ After each push, the **`snyk-scan`** job in the Docker workflow scans the image 
 
 ## Dependency Updates
 
-Docker base images are kept current by Dependabot ([`dependabot.yml`](../.github/dependabot.yml), `package-ecosystem: docker`).
+Docker base images are kept current by Dependabot ([`dependabot.yml`](../.github/dependabot.yml), `package-ecosystem: docker`). The `docker-all` group bumps every `FROM` digest (and the trailing version comment) in one weekly PR — see [`DEPENDABOT.md`](DEPENDABOT.md) for the schedule, auto-merge rules, and grouping convention.
+
+When the Snyk container scan ([`SNYK.md`](SNYK.md)) flags a CVE introduced by a base layer, the fastest path back to green is to wait for the next Dependabot bump or to manually rerun the `docker buildx imagetools inspect <image>:<tag>` digest and update the `FROM` line — never replace the digest with a floating tag.
 
 ## References
 

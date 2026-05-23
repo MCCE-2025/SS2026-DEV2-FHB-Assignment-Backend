@@ -8,6 +8,7 @@ Automated dependency updates are managed via [`.github/dependabot.yml`](../.gith
 |-----------|-----------|----------|---------------|
 | `npm` | `/` | Weekly (Monday, 03:00 UTC) | `chore(deps)` / `chore(deps-dev)` |
 | `github-actions` | `/` | Weekly (Monday, 03:00 UTC) | `chore(ci)` |
+| `docker` | `/` | Weekly (Monday, 03:00 UTC) | `chore(docker)` |
 
 Open PR limit for `npm`: **5**.
 
@@ -20,6 +21,7 @@ To keep PR noise low, updates are consolidated via [Dependabot groups](https://d
 | `npm-minor-patch` | `npm` | All minor & patch bumps in one PR |
 | `npm-major` | `npm` | All major bumps in one PR (review carefully) |
 | `actions-all` | `github-actions` | All workflow action bumps in one PR |
+| `docker-all` | `docker` | All base-image digest bumps in one PR |
 
 Major bumps are kept in a separate group because they may be breaking and warrant manual review.
 
@@ -27,6 +29,13 @@ Major bumps are kept in a separate group because they may be breaking and warran
 > commit SHAs (and the version comment) rather than floating tags. See
 > [`ACTIONS-SECURITY.md`](./ACTIONS-SECURITY.md) for the policy (enforced by
 > zizmor's `unpinned-uses` audit) and other workflow security checks.
+
+> **Docker base images are digest-pinned.** Every `FROM` in the
+> [`Dockerfile`](../Dockerfile) is pinned by `@sha256:…` with a trailing
+> version comment, so a stale GHA build cache cannot silently reintroduce a
+> vulnerable layer. The `docker-all` group bumps both the digest and the
+> comment. See [`DOCKER.md`](./DOCKER.md) and [`SNYK.md`](./SNYK.md) for the
+> rebuild + container-scan flow.
 
 ## Adding a New Ecosystem
 

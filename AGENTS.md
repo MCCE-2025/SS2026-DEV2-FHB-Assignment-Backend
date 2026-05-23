@@ -18,6 +18,7 @@ Entry point: `index.js` · Server runs on port `3001`.
 ### Current Dependencies
 - **npm** (Node.js) at root (`/`)
 - **github-actions** at root (`/`)
+- **docker** (base images in `Dockerfile`) at root (`/`)
 
 ### How to Add New Ecosystems
 
@@ -72,3 +73,19 @@ Most importantly: every `uses:` reference MUST be pinned to a full 40-character 
 ```
 
 Float refs like `@v6`, `@main`, or `@master` are rejected by the `unpinned-uses` audit. Dependabot keeps the SHAs updated automatically on the weekly `github-actions` schedule. When adding a new action, run `zizmor --fix .github/workflows/` locally before committing — see [`docs/ACTIONS-SECURITY.md`](docs/ACTIONS-SECURITY.md) for the full audit catalog, severity policy, and bumping instructions.
+
+## Docker base images (digest-pinned)
+
+Every `FROM` line in the [`Dockerfile`](Dockerfile) MUST be pinned to a `@sha256:…` digest with the human-readable tag as a trailing comment — same convention as `uses:` for GitHub Actions:
+
+```dockerfile
+FROM gcr.io/distroless/nodejs22-debian12:nonroot@sha256:13593b7570658e8477de39e2f4a1dd25db2f836d68a0ba771251572d23bb4f8e AS runtime
+```
+
+Floating tags (`:nonroot`, `:22-alpine`, …) let the GHA build cache silently keep a vulnerable base layer that the Snyk container scan ([`docs/SNYK.md`](docs/SNYK.md)) has already flagged. Dependabot's `docker-all` group bumps both the digest and the version comment weekly. To resolve a current digest manually:
+
+```bash
+docker buildx imagetools inspect gcr.io/distroless/nodejs22-debian12:nonroot
+```
+
+See [`docs/DOCKER.md`](docs/DOCKER.md) for the full image layout and [`docs/DEPENDABOT.md`](docs/DEPENDABOT.md) for the grouping and auto-merge rules.
