@@ -79,6 +79,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # The Snyk action runs in its own container and does not inherit the runner's
+      # ~/.docker/config.json, so pulling here primes the local daemon cache and
+      # avoids a 404 when Snyk hits the private GHCR image via the docker socket.
+      - name: Pre-pull image for Snyk
+        run: docker pull "${{ needs.build-and-push.outputs.image }}"
+
       - name: Run Snyk to check Docker image for vulnerabilities
         id: snyk
         continue-on-error: true
