@@ -30,30 +30,31 @@ Auto-merge is **not** configured in `dependabot.yml` (not supported there). To e
 - Enable "Allow auto-merge" in repository settings and use `gh pr merge --auto`, or
 - Add a GitHub Actions workflow that auto-merges Dependabot PRs after CI passes.
 
-## Dependency Review on PRs
+## Dependency Audit on PRs
 
-Dependabot only runs on a schedule — it does **not** scan PRs. To catch vulnerable or problematic dependencies *before* they're merged, the repo also runs [`actions/dependency-review-action`](https://github.com/actions/dependency-review-action) via [`.github/workflows/dependency-review.yml`](../.github/workflows/dependency-review.yml).
+Dependabot only runs on a schedule — it does **not** scan PRs. To catch vulnerable dependencies *before* they're merged, the repo runs `npm audit` via [`.github/workflows/dependency-audit.yml`](../.github/workflows/dependency-audit.yml).
 
 | Trigger | Pull requests targeting `main` |
 |---------|--------------------------------|
+| Command | `npm audit --audit-level=moderate` |
 | Fails on | Vulnerabilities of `moderate` severity or higher |
 | Permissions | `contents: read` |
 
 This complements Dependabot:
 
 - **Dependabot** → keeps existing dependencies up to date (scheduled)
-- **Dependency Review** → blocks new vulnerable dependencies in PRs (on PR events)
+- **`npm audit`** → blocks PRs that introduce known vulnerabilities (on PR events)
 
-### Requirements
+### Why `npm audit` instead of `actions/dependency-review-action`?
 
-The action requires either a **public repository** or **GitHub Advanced Security** enabled for private repos. Without one of these, the workflow will fail.
+GitHub's [`dependency-review-action`](https://github.com/actions/dependency-review-action) requires either a **public repository** or **GitHub Advanced Security**. Since this repo is private without GHAS, we use `npm audit` — it's free, built into npm, and provides comparable CVE detection for npm dependencies.
 
 ### Tuning Severity
 
-Adjust `fail-on-severity` in the workflow to `low`, `moderate`, `high`, or `critical` depending on how strict you want the check.
+Adjust `--audit-level` in the workflow to `low`, `moderate`, `high`, or `critical` depending on how strict you want the check.
 
 ## References
 
 - [Dependabot docs](https://docs.github.com/en/code-security/dependabot)
 - [Configuration reference](https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file)
-- [Dependency Review Action](https://github.com/actions/dependency-review-action)
+- [`npm audit` docs](https://docs.npmjs.com/cli/v10/commands/npm-audit)
