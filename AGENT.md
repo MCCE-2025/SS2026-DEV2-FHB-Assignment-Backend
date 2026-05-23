@@ -49,3 +49,7 @@ Add a new entry to `.github/dependabot.yml` following this pattern:
 ```
 
 See `docs/DEPENDABOT.md` for full configuration details.
+
+## CodeQL (SAST)
+
+Static code analysis runs via [`.github/workflows/codeql.yml`](.github/workflows/codeql.yml) on PRs and pushes to `main`. See `docs/CODEQL.md` for triggers, quality gate, and triage.

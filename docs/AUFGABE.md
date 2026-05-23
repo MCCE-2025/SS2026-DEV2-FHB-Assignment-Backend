@@ -14,5 +14,5 @@ Folgende Anforderungen müssen erfüllt werden:
 - [ ] Installation und Konfiguration (beliebige Konfiguration von jenen die bei der Installation vorgeschlagen werden) von ESLint für das Projekt.
 - [ ] Aufnahme von ESLint in den Build bei jedem Pull-Request in den Main Branch. Ebenso muss dies als Quality-Gate konfiguriert werden.
 - [x] Konfiguration eines Automatismus zum Update von Fremdkomponenten, wenn es eine neue Version gibt (z.B.: snyk, Dependabot, …)
-- [ ] Konfiguration von Statischer Code Analyse inklusive Quality Gate(s). Diese sollen auch bei jedem Pull-Request in den Main Branch ausgeführt werden.
+- [x] Konfiguration von Statischer Code Analyse inklusive Quality Gate(s). Diese sollen auch bei jedem Pull-Request in den Main Branch ausgeführt werden.
 - [ ] Legt abschließend einen Pull-Request mit einer trivialen Änderung an damit man die zuvor konfigurierten Quality Gates sehen kann.
