@@ -23,6 +23,11 @@ To keep PR noise low, updates are consolidated via [Dependabot groups](https://d
 
 Major bumps are kept in a separate group because they may be breaking and warrant manual review.
 
+> **GitHub Actions are SHA-pinned.** The `actions-all` group bumps the
+> commit SHAs (and the version comment) rather than floating tags. See
+> [`ACTIONS-SECURITY.md`](./ACTIONS-SECURITY.md) for the policy (enforced by
+> zizmor's `unpinned-uses` audit) and other workflow security checks.
+
 ## Adding a New Ecosystem
 
 Append a new entry to `.github/dependabot.yml`:
@@ -55,6 +60,7 @@ GitHub still waits for required checks before merging, so the PR only merges onc
    - `Lint` (`eslint`)
    - `CodeQL` (`Analyze (javascript-typescript)`)
    - `Dependency Audit` (`npm-audit`)
+   - `Actions Security` (`Audit workflows (zizmor)`)
 
 Without required checks, an auto-merge workflow could land an untested PR.
 
