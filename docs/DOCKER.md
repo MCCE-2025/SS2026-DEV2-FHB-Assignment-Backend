@@ -8,12 +8,12 @@ Multi-stage [Dockerfile](../Dockerfile):
 
 | Stage | Base | Purpose |
 |-------|------|---------|
-| `deps` | `node:24-bookworm-slim` | Install production npm dependencies only (`npm ci --omit=dev --ignore-scripts`) |
-| `runtime` | `gcr.io/distroless/nodejs24-debian12:nonroot` | Run the app as non-root without shell or package manager |
+| `deps` | `node:24.14.1-trixie-slim` | Install production npm dependencies only (`npm ci --omit=dev --ignore-scripts`) |
+| `runtime` | `gcr.io/distroless/nodejs24-debian13:nonroot` | Run the app as non-root without shell or package manager |
 
-Both stages run on the same **Node 24** Active LTS major and the same **Debian 12 (bookworm)** family, so the `node_modules` produced in `deps` has a matching ABI and libc when copied into the distroless runtime. The supported Node version is also declared in [`package.json`](../package.json) via `engines.node`, and the CI workflows resolve `lts/*` to the same major automatically.
+Both stages run on the same **Node 24** Active LTS patch line and **Debian 13 (trixie)** family, so the `node_modules` produced in `deps` has a matching ABI and libc when copied into the distroless runtime. The supported Node version is also declared in [`package.json`](../package.json) via `engines.node`, and the CI workflows resolve `lts/*` to the same major automatically.
 
-> Why not Node 26? Google's distroless project ships only LTS Node majors, and Node 26 (released April 2026) does not become Active LTS until October 2026. Dependabot is configured to ignore non-LTS and major Node image bumps (see [`DEPENDABOT.md`](./DEPENDABOT.md)); adopt the next LTS major manually once `gcr.io/distroless/nodejs<major>-debian12` is available and the line is Active LTS.
+> Why not Node 26? Google's distroless project ships only LTS Node majors, and Node 26 (released April 2026) does not become Active LTS until October 2026. Dependabot is configured to ignore non-LTS and major Node image bumps (see [`DEPENDABOT.md`](./DEPENDABOT.md)); adopt the next LTS major manually once `gcr.io/distroless/nodejs<major>-debian13` is published and the line is Active LTS.
 
 Hardening choices:
 
