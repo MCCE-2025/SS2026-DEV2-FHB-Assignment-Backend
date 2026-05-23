@@ -35,3 +35,18 @@ updates:
     groups:
       actions-all:
         patterns: ["*"]
+
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "03:00"
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: "chore(docker)"
+      include: "scope"
+    groups:
+      docker-all:
+        patterns: ["*"]
