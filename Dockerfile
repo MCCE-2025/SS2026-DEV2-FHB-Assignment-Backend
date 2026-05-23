@@ -5,7 +5,7 @@
 # (package-ecosystem: docker) bumps both digests + version comments weekly.
 # Both stages run the same Node major (Active LTS, currently 24) on Debian 12
 # so the deps stage's compiled node_modules ABI matches the distroless runtime.
-FROM node:24-bookworm-slim@sha256:242549cd46785b480c832479a730f4f2a20865d61ea2e404fdb2a5c3d3b73ecf AS deps
+FROM node:26-bookworm-slim@sha256:e89172f5e6154ba212269866bf3fbadbca8eb7901e10c0eccf08f2147bfae505 AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev --ignore-scripts
