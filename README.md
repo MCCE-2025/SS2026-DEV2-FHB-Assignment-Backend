@@ -23,12 +23,27 @@ npm run dev
 
 This repo uses **ESLint** for JavaScript linting, **CodeQL** for static analysis of application code, **Dependabot** for scheduled dependency updates, and **`npm audit`** on every PR to block vulnerable dependencies from being merged.
 
+### ESlint
+
 - ESLint workflow: [`.github/workflows/lint.yml`](.github/workflows/lint.yml)
 - ESLint details: [`docs/ESLINT.md`](docs/ESLINT.md)
+
+### CodeQL
+
 - CodeQL workflow: [`.github/workflows/codeql.yml`](.github/workflows/codeql.yml)
 - CodeQL details: [`docs/CODEQL.md`](docs/CODEQL.md)
+
+### Dependabot
+
 - Dependabot config: [`.github/dependabot.yml`](.github/dependabot.yml)
 - PR audit workflow: [`.github/workflows/dependency-audit.yml`](.github/workflows/dependency-audit.yml)
 - Dependabot details: [`docs/DEPENDABOT.md`](docs/DEPENDABOT.md)
+
+### Dependency Audit
+
+via `npm audit` on pull requests
+
+- PR audit workflow: [`.github/workflows/dependency-audit.yml`](.github/workflows/dependency-audit.yml)
+-
 
 > ⚠️ When adding new third-party components, update `.github/dependabot.yml`. See [`AGENT.md`](AGENT.md).
