@@ -65,6 +65,10 @@ docker pull ghcr.io/<owner>/<repo>:sha-abc1234
 
 GHCR packages may be private by default. Link the package to the repository under **Packages → Package settings → Manage Actions access**, or make the package public if needed.
 
+## Container Security Scan
+
+After each push, the **`snyk-scan`** job in the Docker workflow scans the image that was just published to GHCR. Setup and quality-gate behaviour are documented in [`SNYK.md`](SNYK.md).
+
 ## Dependency Updates
 
 Docker base images are kept current by Dependabot ([`dependabot.yml`](../.github/dependabot.yml), `package-ecosystem: docker`).
