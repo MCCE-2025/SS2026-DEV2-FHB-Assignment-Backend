@@ -32,6 +32,33 @@ jobs:
       - name: Run tests with coverage
         run: npm test
 
+      - name: Publish coverage summary
+        if: always()
+        run: |
+          if [ ! -f coverage/coverage-summary.json ]; then
+            echo "::warning::coverage/coverage-summary.json not found — skipping coverage summary."
+            exit 0
+          fi
+          node -e '
+            const { readFileSync } = require("node:fs");
+            const data = JSON.parse(readFileSync("coverage/coverage-summary.json", "utf8"));
+            const t = data.total;
+            const fmt = (m) => `${m.pct.toFixed(2)}% (${m.covered}/${m.total})`;
+            const out = [
+              "## Coverage summary",
+              "",
+              "| Metric | Coverage |",
+              "|------------|----------|",
+              `| Lines      | ${fmt(t.lines)} |`,
+              `| Statements | ${fmt(t.statements)} |`,
+              `| Functions  | ${fmt(t.functions)} |`,
+              `| Branches   | ${fmt(t.branches)} |`,
+              "",
+              "_Full HTML report available as the `coverage-report` artifact._",
+            ].join("\n");
+            console.log(out);
+          ' | tee -a "$GITHUB_STEP_SUMMARY"
+
       - name: Upload coverage report
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

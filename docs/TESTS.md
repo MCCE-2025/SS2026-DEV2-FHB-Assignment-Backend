@@ -33,7 +33,10 @@ Coverage output is written to `coverage/` (HTML report: `coverage/index.html`).
 
 ## CI
 
-The **Build** workflow runs `npm test` in the same job as `npm ci` and the syntax check. On completion (pass or fail), the `coverage/` directory is uploaded as the **`coverage-report`** artifact (14-day retention).
+The **Build** workflow runs `npm test` in the same job as `npm ci` and the syntax check. On completion (pass or fail):
+
+- A coverage summary (lines / statements / functions / branches) is parsed from `coverage/coverage-summary.json` (produced by Vitest's `json-summary` reporter) and posted to the GitHub **Job Summary** at the top of the workflow run page, as well as printed to the regular log.
+- The full `coverage/` directory is uploaded as the **`coverage-report`** artifact (14-day retention) for the detailed HTML report.
 
 There is no coverage threshold quality gate; the report is for inspection only.
 
