@@ -17,6 +17,12 @@ const defaultNotes = [
     date: '2022-01-10T19:20:14.298Z',
     important: true,
   },
+  {
+    id: 4,
+    content: 'JSON is the de facto payload format for REST APIs',
+    date: '2022-01-10T20:15:42.512Z',
+    important: false,
+  },
 ]
 
 let notes = [...defaultNotes]
