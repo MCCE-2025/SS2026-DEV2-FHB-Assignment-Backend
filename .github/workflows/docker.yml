@@ -46,7 +46,8 @@ jobs:
 
       - name: Image reference for scan job
         id: image
-        run: echo "ref=ghcr.io/${GITHUB_REPOSITORY}:sha-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+        # GHCR and Docker require lowercase repository paths (GITHUB_REPOSITORY is mixed-case).
+        run: echo "ref=ghcr.io/${GITHUB_REPOSITORY,,}:sha-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
 
       - name: Build and push
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
