@@ -8,7 +8,8 @@ RUN npm ci --omit=dev --ignore-scripts
 FROM gcr.io/distroless/nodejs22-debian12:nonroot AS runtime
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY package.json index.js ./
+COPY package.json index.js app.js ./
+COPY services ./services
 USER nonroot:nonroot
 EXPOSE 3001
 CMD ["index.js"]
