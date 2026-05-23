@@ -1,0 +1,54 @@
+name: Actions Security
+
+# Static security audit of every GitHub Actions workflow + action definition
+# in this repository, powered by zizmor (https://docs.zizmor.sh).
+#
+# Among ~25 checks, zizmor enforces our SHA-pinning policy via:
+#   - unpinned-uses      : every `uses:` must reference a full commit SHA
+#   - ref-version-mismatch: the `# vX.Y.Z` comment must match that SHA
+#
+# It also catches excessive permissions, template injection, credential
+# persistence, untrusted-checkout RCE patterns, and more.
+#
+# See docs/ACTIONS-SECURITY.md for policy, severity threshold, and triage.
+
+on:
+  pull_request:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/**"
+      - ".github/actions/**"
+      - "zizmor.yml"
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/**"
+      - ".github/actions/**"
+      - "zizmor.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  zizmor:
+    name: Audit workflows (zizmor)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Run zizmor
+        uses: zizmorcore/zizmor-action@5f14fd08f7cf1cb1609c1e344975f152c7ee938d # v0.5.6
+        with:
+          # Pin the zizmor binary version explicitly so audits are
+          # reproducible across runs. Dependabot bumps the action SHA above;
+          # bump this string by hand when you want a newer zizmor release.
+          version: "1.25.2"
+          # Fail the job on anything Medium or higher.
+          min-severity: "medium"
+          # This repo is private without GitHub Advanced Security, so SARIF
+          # upload to Code Scanning isn't available. Surface findings as
+          # inline PR annotations instead.
+          advanced-security: false
+          annotations: true
