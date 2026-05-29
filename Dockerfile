@@ -5,7 +5,7 @@
 # (package-ecosystem: docker) bumps both digests + version comments weekly.
 # Both stages run Node 24 Active LTS on Debian 13 (trixie) so node_modules ABI matches
 # the distroless runtime. debian12 distroless tags are no longer rebuilt upstream.
-FROM node:24-trixie-slim@sha256:05c08ce4291e9a58f59456a7985176defb12cdd42271f35ff81a3e167ea61d4c AS deps
+FROM node:26-trixie-slim@sha256:1e738cb88890a15c71880323fbc35a739b7bbc703d72e8bfd1613128f8182f78 AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev --ignore-scripts
